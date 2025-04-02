@@ -9,8 +9,11 @@ class Program
     {
         var basePath = "https://en.wikipedia.org/wiki/List_of_airline_codes_";
         var csvPath = "airline_codes_all.csv";
-        var outputDir = Directory.GetCurrentDirectory();
+        var outputDir = Path.Combine(Directory.GetCurrentDirectory(), "airline_vectors");
         var baseUrl = "https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/";
+
+        // Create output directory first
+        if (!Directory.Exists(outputDir)) Directory.CreateDirectory(outputDir);
 
         var suffixes = new List<string> { "0%E2%80%939" }; // Encoded 0–9
         suffixes.AddRange(Enumerable.Range('A', 26).Select(i => ((char)i).ToString())); // A–Z

@@ -1,6 +1,10 @@
 name: 🛩️ Download Airline SVG Logos
 
 on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:  # 🚀 Manual trigger
   schedule:
     - cron: '0 0 * * *'  # ⏰ Daily at midnight UTC
@@ -37,7 +41,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: 🚀 Run logo downloader
-        run: dotnet run --project path/to/YourDownloader.csproj
+        run: dotnet run --project IATAScraper.csproj
 
       - name: 📦 Commit new SVG files
         run: |

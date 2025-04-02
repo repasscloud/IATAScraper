@@ -128,7 +128,17 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine($"⛔ {iata}: Not found (HTTP {(int)response.StatusCode})");
+                    using var response2 = await httpClient.GetAsync("https://raw.githubusercontent.com/googlefonts/noto-emoji/main/svg/emoji_u2708.svg");
+                    if (response2.IsSuccessStatusCode)
+                    {
+                        var bytes = await response2.Content.ReadAsByteArrayAsync();
+                        await File.WriteAllBytesAsync(localFile, bytes);
+                        Console.WriteLine($"✅ Downloaded {iata}.svg");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"⛔ {iata}: Not found (HTTP {(int)response2.StatusCode})");
+                    }
                 }
             }
             catch (Exception ex)

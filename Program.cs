@@ -131,9 +131,10 @@ class Program
                     using var response2 = await httpClient.GetAsync("https://raw.githubusercontent.com/googlefonts/noto-emoji/main/svg/emoji_u2708.svg");
                     if (response2.IsSuccessStatusCode)
                     {
+                        Console.WriteLine($"⛔ {iata}: Not found (HTTP {(int)response.StatusCode})");
                         var bytes = await response2.Content.ReadAsByteArrayAsync();
                         await File.WriteAllBytesAsync(localFile, bytes);
-                        Console.WriteLine($"✅ Downloaded {iata}.svg");
+                        Console.WriteLine($"✅ Downloaded {iata}.svg as u2708 emoji instead.");
                     }
                     else
                     {

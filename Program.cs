@@ -128,7 +128,8 @@ class Program
                 }
                 else
                 {
-                    using var response2 = await httpClient.GetAsync("https://raw.githubusercontent.com/googlefonts/noto-emoji/main/svg/emoji_u2708.svg");
+                    using var response2 = await httpClient.GetAsync("https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/multiple_airlines_logo_sq.svg");
+                    // using var response2 = await httpClient.GetAsync("https://raw.githubusercontent.com/googlefonts/noto-emoji/main/svg/emoji_u2708.svg");
                     if (response2.IsSuccessStatusCode)
                     {
                         Console.WriteLine($"⛔ {iata}: Not found (HTTP {(int)response.StatusCode})");

@@ -35,22 +35,28 @@ jobs:
         run: dotnet --version
 
       - name: 🧱 Restore dependencies
-        run: dotnet restore
+        run: dotnet restore IATAScraper/IATAScraper.csproj
 
       - name: 🏗️ Build project
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore IATAScraper/IATAScraper.csproj
 
       - name: 🚀 Run logo downloader
-        run: dotnet run --project IATAScraper.csproj
+        run: dotnet run --project IATAScraper/IATAScraper.csproj -- "https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/"
+
+      - name: Run cargo scraper
+        run: |
+          cargo build --release --manifest-path ./iata-scraper/Cargo.toml
+          ./iata-scraper/target/release/iata-scraper "https://assets.wego.com/image/upload/v20251108/flights/airlines_square/"
 
       - name: 📦 Commit new SVG files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add *.svg
+          git add *.png
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "🛬 Add newly downloaded airline SVG logos"
+            git commit -m "🛬 Add newly downloaded airline SVG and PNG logos"
             git push origin main
           fi

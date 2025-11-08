@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:  # 🚀 Manual trigger
   schedule:
-    - cron: '0 0 * * 1'  # ⏰ Daily at midnight UTC
+    - cron: '0 0 * * 0'  # ⏰ 00:00 on Sundays
 
 jobs:
   download-logos:
@@ -43,17 +43,24 @@ jobs:
       - name: 🚀 Run logo downloader
         run: dotnet run --project IATAScraper/IATAScraper.csproj -- "https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/"
 
-      - name: Run cargo scraper
+      - name: 📦 Run cargo scraper
         run: |
+          cargo clean --manifest-path ./iata-scraper/Cargo.toml
           cargo build --release --manifest-path ./iata-scraper/Cargo.toml
           ./iata-scraper/target/release/iata-scraper "https://assets.wego.com/image/upload/v20251108/flights/airlines_square/"
+
+      - name: 🗑️ Cleanup downloaded files
+        run: |
+          find . -name 'airline_codes_all.csv' -delete
+          find ./airline_bitmaps/ -type f ! -name '*.png' -delete
+          find ./airline_vectors/ -type f ! -name '*.svg' -delete
 
       - name: 📦 Commit new SVG files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add *.svg
-          git add *.png
+          git add ./airline_bitmaps/
+          git add ./airline_vectors/
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
